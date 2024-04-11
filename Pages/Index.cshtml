@@ -1,0 +1,50 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+<div>
+    <h1 class="display-4">Repositories</h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Secrets</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var repo in Model.Repositories)
+        {
+        <tr>
+            <td class="text-nowrap"><a href="@repo.Owner.HtmlUrl">@repo.Owner.Login</a>/<a href="@repo.HtmlUrl" target="_blank">@repo.Name</a> <span class="badge bg-secondary">@repo.Visibility</span></td>
+            <td>@repo.Description</td>
+                <td><a class="btn btn-primary" asp-page="/Secrets" asp-route-owner="@repo.Owner.Login" asp-route-repo="@repo.Name"><i class="bi bi-key"></i></a></td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+}
+else
+{
+<div class="jumbotron">
+    <h1>Authentication</h1>
+    <p class="lead text-left">Sign in using one of these external providers:</p>
+
+    @foreach (var scheme in Model.Schemes.OrderBy(p => p.DisplayName))
+    {
+        <form asp-page="SignIn" method="post">
+            <input type="hidden" name="Provider" value="@scheme.Name" />
+            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+            <button class="btn btn-lg btn-success m-1" type="submit">
+                Sign in using @scheme.DisplayName
+            </button>
+        </form>
+    }
+</div>
+}
