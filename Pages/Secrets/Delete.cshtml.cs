@@ -1,0 +1,46 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using GitHubRepoSecrets.Services;
+using Octokit;
+
+namespace GitHubRepoSecrets.Pages.Secrets
+{
+    public class DeleteModel : PageModel
+    {
+        private readonly GitHubService gitHubService;
+
+        [BindProperty(SupportsGet = true)]
+        public string? Owner { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? Repo { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? SecretName { get; set; }
+
+        public RepositorySecret Secret { get; set; } = default!;
+
+        public DeleteModel(GitHubService gitHubService)
+        {
+            this.gitHubService = gitHubService;
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            if (User.Identity?.IsAuthenticated is false)
+            {
+                return Unauthorized();
+            }
+
+            Secret = await gitHubService.GetSecretAsync(Owner, Repo, SecretName);
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(int? id)
+        {
+            await gitHubService.DeleteSecretAsync(Owner, Repo, SecretName);
+            return RedirectToPage("./Index", new { Owner, Repo });
+        }
+    }
+}

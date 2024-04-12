@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using GitHubRepoSecrets.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ builder.Services
     });
 
 builder.Services.AddRazorPages();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<GitHubService>();
 
 var app = builder.Build();
 
@@ -67,5 +70,12 @@ app.MapGet("/signout", async ctx =>
             RedirectUri = "/"
         });
 });
+
+//test endpoint
+app.MapGet("/test", async ctx =>
+{
+    var gitHubService = ctx.RequestServices.GetRequiredService<GitHubService>();
+    await ctx.Response.WriteAsync("Hello World!");
+}); 
 
 app.Run();

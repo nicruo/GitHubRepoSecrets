@@ -1,3 +1,4 @@
+using GitHubRepoSecrets.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,15 +9,17 @@ namespace GitHubRepoSecrets.Pages;
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;
+    private readonly GitHubService gitHubService;
 
     public IEnumerable<AuthenticationScheme> Schemes { get; set; }
     [BindProperty(SupportsGet = true)]
     public string ReturnUrl { get; set; }
     public IReadOnlyList<Repository> Repositories { get; set; } = new List<Repository>();
 
-    public IndexModel(ILogger<IndexModel> logger)
+    public IndexModel(ILogger<IndexModel> logger, GitHubService gitHubService)
     {
         _logger = logger;
+        this.gitHubService = gitHubService;
     }
 
     public async Task<IActionResult> OnPost([FromForm] string provider)
@@ -54,13 +57,6 @@ public class IndexModel : PageModel
             return;
         }
 
-        var accessToken = User.FindFirst("access_token")?.Value;
-        
-        var client = new GitHubClient(new ProductHeaderValue("test"))
-        {
-            Credentials = new Credentials(accessToken)
-        };
-
-        Repositories = (await client.Repository.GetAllForCurrent()).Where(r => r.Permissions.Push).ToList();
+        Repositories = await gitHubService.GetRepositoriesAsync();
     }
 }

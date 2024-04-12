@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
 @if (User.Identity?.IsAuthenticated == true)
@@ -13,7 +13,7 @@
         <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Secrets</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@
         <tr>
             <td class="text-nowrap"><a href="@repo.Owner.HtmlUrl">@repo.Owner.Login</a>/<a href="@repo.HtmlUrl" target="_blank">@repo.Name</a> <span class="badge bg-secondary">@repo.Visibility</span></td>
             <td>@repo.Description</td>
-                <td><a class="btn btn-primary" asp-page="/Secrets" asp-route-owner="@repo.Owner.Login" asp-route-repo="@repo.Name"><i class="bi bi-key"></i></a></td>
+                <td><a asp-page="/Secrets/Index" asp-route-owner="@repo.Owner.Login" asp-route-repo="@repo.Name">Secrets</a></td>
         </tr>
         }
         </tbody>
