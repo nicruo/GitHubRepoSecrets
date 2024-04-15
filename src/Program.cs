@@ -1,10 +1,22 @@
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using GitHubRepoSecrets.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.HttpOverrides;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var githubClientId = builder.Configuration["github:clientId"];
+if (string.IsNullOrEmpty(githubClientId))
+{
+    throw new ArgumentException("GITHUB__CLIENTID is required");
+}
+
+var githubClientSecret = builder.Configuration["github:clientSecret"];
+if (string.IsNullOrEmpty(githubClientSecret))
+{
+    throw new ArgumentException("GITHUB__CLIENTSECRET is required");
+}
 
 builder.Services
     .AddAuthentication(o =>
@@ -18,8 +30,8 @@ builder.Services
     })
     .AddGitHub(options =>
     {
-        options.ClientSecret = builder.Configuration["github:clientSecret"];
-        options.ClientId = builder.Configuration["github:clientId"];
+        options.ClientSecret = githubClientSecret;
+        options.ClientId = githubClientId;
         options.CallbackPath = "/signin-github";
         options.Scope.Add("repo");
         options.Events.OnCreatingTicket += context =>
@@ -27,9 +39,7 @@ builder.Services
             if (context.AccessToken is { })
             {
                 context.Identity?.AddClaim(new Claim("access_token", context.AccessToken));
-                
             }
-
             return Task.CompletedTask;
         };
     });
