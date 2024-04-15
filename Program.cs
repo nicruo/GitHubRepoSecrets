@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using GitHubRepoSecrets.Services;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,6 @@ builder.Services
         options.ClientSecret = builder.Configuration["github:clientSecret"];
         options.ClientId = builder.Configuration["github:clientId"];
         options.CallbackPath = "/signin-github";
-        options.Scope.Add("admin:org");
         options.Scope.Add("repo");
         options.Events.OnCreatingTicket += context =>
         {
@@ -35,19 +35,22 @@ builder.Services
     });
 
 builder.Services.AddRazorPages();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<GitHubService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-}
-else
-{
+app.UseForwardedHeaders();
+
+if (!app.Environment.IsDevelopment())
+{ 
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -70,12 +73,5 @@ app.MapGet("/signout", async ctx =>
             RedirectUri = "/"
         });
 });
-
-//test endpoint
-app.MapGet("/test", async ctx =>
-{
-    var gitHubService = ctx.RequestServices.GetRequiredService<GitHubService>();
-    await ctx.Response.WriteAsync("Hello World!");
-}); 
 
 app.Run();
