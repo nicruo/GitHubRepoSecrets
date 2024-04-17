@@ -1,6 +1,6 @@
 ﻿@using System.Text.Json
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark" hx-boost="true" hx-target="#main-content" hx-swap="innerHTML show:none" hx-indicator="#loading">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GitHubRepoSecrets.styles.css" asp-append-version="true" />
+    <script src="~/lib/htmx/htmx.min.js"></script>
 </head>
 <body>
     <header>
@@ -28,7 +29,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="/signout">Sign Out</a>
                             </li>
-
                         }
                     </ul>
                 </div>
@@ -36,7 +36,8 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" id="main-content" class="pb-3">
+            <div class="htmx-indicator loader position-fixed top-0 start-50 translate-middle-x" id="loading"></div>
             @RenderBody()
         </main>
     </div>

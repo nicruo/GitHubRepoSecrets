@@ -1,3 +1,15 @@
-﻿@{
-    Layout = "_Layout";
+﻿@using Htmx
+@{
+    @if (!Context.Request.IsHtmx())
+    {
+        Layout = "_Layout";
+    }
+    else if(Context.Request.IsHtmxBoosted())
+    {
+        Layout = "_LayoutHtmxBoosted";
+    }
+    else
+    {
+        Layout = null;
+    }
 }

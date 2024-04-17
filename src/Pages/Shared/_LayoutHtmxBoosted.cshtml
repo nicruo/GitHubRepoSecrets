@@ -1,0 +1,7 @@
+﻿<head>
+    <title>@ViewData["Title"] - GitHubRepoSecrets</title>
+</head>
+<div class="htmx-indicator loader position-fixed top-0 start-50 translate-middle-x" id="loading"></div>
+@RenderBody()
+
+@await RenderSectionAsync("Scripts", required: false)

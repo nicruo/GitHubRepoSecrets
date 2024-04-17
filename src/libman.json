@@ -4,7 +4,13 @@
   "libraries": [
     {
       "library": "bootstrap@5.3.3",
+      "files": ["css/*", "js/*"],
       "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "htmx@1.9.11",
+      "files": ["htmx.js", "htmx.min.js"],
+      "destination": "wwwroot/lib/htmx"
     }
   ]
 }
