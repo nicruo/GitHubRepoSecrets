@@ -1,15 +1,17 @@
 ﻿@using Htmx
 @{
-    @if (!Context.Request.IsHtmx())
+    @if (!Context.Request.IsHtmx() || Context.Request.IsHtmxHistoryRestoreRequest())
     {
         Layout = "_Layout";
     }
     else if(Context.Request.IsHtmxBoosted())
     {
+        Context.Response.Headers.Add("Vary", "HX-Request");
         Layout = "_LayoutHtmxBoosted";
     }
     else
     {
+        Context.Response.Headers.Add("Vary", "HX-Request");
         Layout = null;
     }
 }
