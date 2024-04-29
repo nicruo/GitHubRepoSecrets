@@ -54,6 +54,8 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<GitHubService>();
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 var app = builder.Build();
 
 app.UseForwardedHeaders();
