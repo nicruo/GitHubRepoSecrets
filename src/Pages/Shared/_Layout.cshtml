@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GitHubRepoSecrets</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🔑</text></svg>"></link>
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GitHubRepoSecrets.styles.css" asp-append-version="true" />
@@ -23,6 +24,9 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="About">About</a>
                         </li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
@@ -44,7 +48,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - <a href="https://nicruo.com">nicruo.com</a>
+            &copy; 2024 - <a href="https://nicruo.com">nicruo.com</a> - source code at <a href="http://github.com/nicruo/githubreposecrets">GitHub</a>
         </div>
     </footer>
 

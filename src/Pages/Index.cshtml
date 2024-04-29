@@ -6,23 +6,22 @@
 
 @if (User.Identity?.IsAuthenticated == true)
 {
-<partial name="_Repositories" model="Model.Repositories" />
+    <partial name="_Repositories" model="Model.Repositories" />
 }
 else
 {
-<div class="jumbotron">
-    <h1>Authentication</h1>
-    <p class="lead text-left">Sign in using one of these external providers:</p>
-
-    @foreach (var scheme in Model.Schemes.OrderBy(p => p.DisplayName))
-    {
-        <form asp-page="SignIn" method="post" hx-boost="false">
-            <input type="hidden" name="Provider" value="@scheme.Name" />
-            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
-            <button class="btn btn-lg btn-success m-1" type="submit">
-                Sign in using @scheme.DisplayName
-            </button>
-        </form>
-    }
-</div>
+    <div class="container bg-body-tertiary rounded-3 p-5">
+        <h1 class="text-body-emphasis">GitHub Repo Secrets<small>🔑</small></h1>
+        <p class="lead">Manage GitHub Repository Secrets at ease without GitHub CLI or GitHub API. Simple and fast.</p>
+        @foreach (var scheme in Model.Schemes.OrderBy(p => p.DisplayName))
+        {
+            <form asp-page="SignIn" method="post" hx-boost="false">
+                <input type="hidden" name="Provider" value="@scheme.Name" />
+                <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+                <button class="btn btn-lg btn-success" type="submit">
+                    Sign in using @scheme.DisplayName
+                </button>
+            </form>
+        }
+    </div>
 }
