@@ -1,23 +1,21 @@
 ﻿@model IReadOnlyList<Octokit.Repository>
-<div>
-    <h1 class="display-4">Repositories</h1>
-    <table class="table table-striped">
-        <thead>
+<h1 class="display-4">Repositories</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th class="d-none d-lg-table-cell">Description</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var repo in Model)
+        {
             <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th></th>
+                <td class="text-nowrap"><a href="@repo.Owner.HtmlUrl">@repo.Owner.Login</a>/<a href="@repo.HtmlUrl" target="_blank">@repo.Name</a> <span class="badge bg-secondary">@repo.Visibility</span></td>
+                <td class="d-none d-lg-table-cell">@repo.Description</td>
+                <td><a asp-page="/Secrets/Index" asp-route-owner="@repo.Owner.Login" asp-route-repo="@repo.Name">Secrets</a></td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var repo in Model)
-            {
-                <tr>
-                    <td class="text-nowrap"><a href="@repo.Owner.HtmlUrl">@repo.Owner.Login</a>/<a href="@repo.HtmlUrl" target="_blank">@repo.Name</a> <span class="badge bg-secondary">@repo.Visibility</span></td>
-                    <td>@repo.Description</td>
-                    <td><a asp-page="/Secrets/Index" asp-route-owner="@repo.Owner.Login" asp-route-repo="@repo.Name">Secrets</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+        }
+    </tbody>
+</table>
