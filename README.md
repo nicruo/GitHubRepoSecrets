@@ -1,3 +1,6 @@
+> [!WARNING]
+> You don't need this project anymore. GitHub now supports editing Repository Secrets in the UI. No more API / CLI needed.
+
 # GitHubRepoSecrets
 
 ## Description
@@ -25,10 +28,6 @@ docker run -p 8080:8080 -p 8081:8081 -e GITHUB__CLIENTID='YOUR_CLIENTID' -e GITH
 cd src
 dotnet run --project src/GitHubRepoSecrets.csproj
 ```
-
-## Website in Azure
-
-[GitHubRepoSecrets](https://githubreposecretsapp.azurewebsites.net/)
 
 ## Cloud Architecture
 
